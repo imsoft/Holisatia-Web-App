@@ -6,19 +6,25 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    // Obtener el ID del usuario desde los parámetros de la URL
     const { id } = params;
-
-    // Obtener los datos enviados en el cuerpo de la solicitud
     const data = await request.json();
 
-    // Actualizar los datos del usuario en la base de datos usando Prisma
+    // Actualiza los datos del usuario, asegurando que el campo 'image' sea el correcto
+    // const updatedUser = await prisma.user.update({
+    //   where: { id },
+    //   data: {
+    //     ...data,
+    //   },
+    // });
+
     const updatedUser = await prisma.user.update({
       where: { id },
-      data,
+      data: {
+        image: data.image,  // Asegúrate de que envías el campo "image", no "profileImage"
+      },
     });
+    
 
-    // Devolver los datos actualizados del usuario como respuesta JSON
     return NextResponse.json(updatedUser, { status: 200 });
   } catch (error) {
     console.error(error);

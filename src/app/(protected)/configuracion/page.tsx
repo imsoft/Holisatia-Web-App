@@ -1,9 +1,8 @@
 "use client";
 
 import { getUserInfo } from "@/actions";
-import { BirthdayInput, NameInput } from "@/components/user/personal";
+import { BirthdayInput, ImageInput, NameInput } from "@/components/user/personal";
 import { useCurrentUser } from "@/hooks";
-import prisma from "@/lib/db";
 import { User } from "@prisma/client";
 import { useEffect, useState } from "react";
 
@@ -50,6 +49,7 @@ const ProfessionalInfoPage = () => {
           </p>
           <NameInput initialData={userData} id={currentUser?.id ?? ""} />
           <BirthdayInput initialData={userData} id={currentUser?.id ?? ""} />
+          <ImageInput initialData={userData} id={currentUser?.id ?? ""} />
         </div>
       </div>
     </>
