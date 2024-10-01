@@ -46,7 +46,7 @@ model User {
   emailVerified DateTime?
   birthday      DateTime?
   role          UserRole  @default(user)
-  image         String?   @map("profile_image")
+  image         String?
   password      String?
   createdAt     DateTime  @default(now()) @map("created_at")
   updatedAt     DateTime  @updatedAt @map("updated_at")

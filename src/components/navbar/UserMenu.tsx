@@ -15,6 +15,9 @@ import {
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/button";
 import { logout } from "@/actions";
+import { useEffect, useState } from "react";
+import { User } from "@prisma/client";
+import { getUserInfo } from "@/actions";
 
 const firstSectionMenu = [
   {
@@ -63,6 +66,34 @@ export const UserMenu = () => {
   const { onOpen: openRegister } = useRegisterDialog();
 
   const user = useCurrentUser();
+  const [userData, setUserData] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (user?.id) {
+        const data = await getUserInfo(user.id);
+        setUserData(data);
+      }
+      setIsLoading(false);
+    };
+
+    fetchUserData();
+  }, [user?.id]);
+
+  // Mientras se cargan los datos, mostramos un mensaje de carga
+  if (isLoading) {
+    return <div className="text-center">Cargando...</div>;
+  }
+
+  // Si no se encuentra información del usuario
+  if (!userData) {
+    return (
+      <div className="text-center text-red-500">
+        Información del usuario incompleta o no encontrada.
+      </div>
+    );
+  }
 
   const onClick = () => {
     logout();
@@ -74,7 +105,7 @@ export const UserMenu = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="rounded-full gap-2">
             <div className="hidden md:block">
-              <Avatar src={""} />
+              <Avatar src={userData.image} />
             </div>
             <IoMenu size={20} />
           </Button>

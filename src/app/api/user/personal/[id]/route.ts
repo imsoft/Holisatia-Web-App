@@ -9,21 +9,12 @@ export async function PATCH(
     const { id } = params;
     const data = await request.json();
 
-    // Actualiza los datos del usuario, asegurando que el campo 'image' sea el correcto
-    // const updatedUser = await prisma.user.update({
-    //   where: { id },
-    //   data: {
-    //     ...data,
-    //   },
-    // });
-
     const updatedUser = await prisma.user.update({
       where: { id },
       data: {
-        image: data.image,  // Asegúrate de que envías el campo "image", no "profileImage"
+        image: data.image,
       },
     });
-    
 
     return NextResponse.json(updatedUser, { status: 200 });
   } catch (error) {

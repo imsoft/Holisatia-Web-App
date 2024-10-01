@@ -14,7 +14,7 @@ const ProfessionalInfoPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       if (currentUser?.id) {
-        const data = await getUserInfo(currentUser.id); // Obtener información del usuario
+        const data = await getUserInfo(currentUser.id);
         setUserData(data);
       }
       setIsLoading(false);
