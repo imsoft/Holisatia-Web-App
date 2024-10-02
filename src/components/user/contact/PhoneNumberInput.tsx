@@ -24,7 +24,7 @@ interface PhoneNumberInputProps {
 }
 
 const formSchema = z.object({
-  phoneNumberUrl: z.string().min(1, {
+  phoneNumber: z.string().min(1, {
     message: "La url de PhoneNumber es requerida",
   }),
 });
@@ -40,7 +40,7 @@ export const PhoneNumberInput = ({ id, initialData }: PhoneNumberInputProps) => 
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { phoneNumberUrl: initialData.phoneNumber || "" },
+    defaultValues: { phoneNumber: initialData.phoneNumber || "" },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -80,7 +80,7 @@ export const PhoneNumberInput = ({ id, initialData }: PhoneNumberInputProps) => 
                 >
                   <FormField
                     control={form.control}
-                    name="phoneNumberUrl"
+                    name="phoneNumber"
                     render={({ field }) => (
                       <FormItem className="bg-white w-full">
                         <FormControl>

@@ -13,6 +13,7 @@ export async function PATCH(
       where: { id },
       data: {
         image: data.image,
+        birthday: data.birthday,
       },
     });
 

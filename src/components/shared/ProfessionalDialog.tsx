@@ -1,3 +1,5 @@
+"use client";
+
 import { useProfessionalDialog, useToast } from "@/hooks";
 import {
   Dialog,
@@ -45,6 +47,11 @@ export const ProfessionalDialog = ({
       // Realiza la solicitud para cambiar el rol del usuario
       await axios.patch(`/api/user/${currentUser.id}`, {
         role: "professional",
+      });
+
+       // Crear un nuevo profesional vinculado al usuario
+       await axios.post(`/api/professional`, {
+        userId: currentUser.id,
       });
 
       toast({

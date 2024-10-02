@@ -1,7 +1,9 @@
-export * from "./login";
-export * from "./logout";
-export * from "./getUserInfo";
-export * from "./getUserContactInfo";
-export * from "./getLocationInfo";
-export * from "./getProfessionalInfo";
-export * from "./getMedicalSessionInfo";
+export { login } from './login';
+export { logout } from './logout';
+export { getUserInfo } from './getUserInfo';
+export { getContactInfo } from './getUserContactInfo';
+export { getLocationInfo } from './getLocationInfo';
+export { getProfessionalInfo } from './getProfessionalInfo';
+export { getMedicalSessionInfo } from './getMedicalSessionInfo';
+export { getProfessionals } from './getProfessionals';
+export { getProfessional } from './getProfessional';

@@ -28,7 +28,7 @@ export default async function RootLayout({
       <html lang="es">
         <body className={`${nunito.className} antialiased`}>
           <Navbar />
-          <main>{children}</main>
+          <main className="pb-20 pt-28">{children}</main>
           <Toaster />
         </body>
       </html>

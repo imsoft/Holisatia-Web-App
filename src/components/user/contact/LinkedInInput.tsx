@@ -24,7 +24,7 @@ interface LinkedInInputProps {
 }
 
 const formSchema = z.object({
-  linkedInUrl: z.string().min(1, {
+  linkedinUrl: z.string().min(1, {
     message: "La url de LinkedIn es requerida",
   }),
 });
@@ -40,7 +40,7 @@ export const LinkedInInput = ({ id, initialData }: LinkedInInputProps) => {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: { linkedInUrl: initialData.linkedinUrl || "" },
+    defaultValues: { linkedinUrl: initialData.linkedinUrl || "" },
   });
 
   const { isSubmitting, isValid } = form.formState;
@@ -80,7 +80,7 @@ export const LinkedInInput = ({ id, initialData }: LinkedInInputProps) => {
                 >
                   <FormField
                     control={form.control}
-                    name="linkedInUrl"
+                    name="linkedinUrl"
                     render={({ field }) => (
                       <FormItem className="bg-white w-full">
                         <FormControl>

@@ -11,7 +11,6 @@ import {
   XInput,
 } from "@/components/user/contact";
 import { useCurrentUser } from "@/hooks";
-import { useToast } from "@/hooks"; // Para notificaciones
 import { getContactInfo } from "@/actions";
 import { Contact } from "@prisma/client";
 
@@ -19,7 +18,6 @@ const ContactSettingsPage = () => {
   const currentUser = useCurrentUser(); // Obtiene la sesión actual
   const [contactData, setContactData] = useState<Contact | null>(null); // Estado para almacenar los datos de contacto
   const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
 
   useEffect(() => {
     const fetchContactData = async () => {

@@ -61,7 +61,9 @@ export const PriceInput = ({ id, initialData }: PriceInputProps) => {
         price: Number(values.price),
       };
 
+      // Asegúrate de que este 'id' es el correcto del ProfessionalSessionDetail
       await axios.patch(`/api/user/medical-session/${id}`, parsedValues);
+
       toast({
         variant: "success",
         title: "¡Información Actualizada! 🎉",
@@ -72,7 +74,7 @@ export const PriceInput = ({ id, initialData }: PriceInputProps) => {
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Uh oh! Algo salio mal.",
+        title: "Uh oh! Algo salió mal.",
         description: "Por favor intenta de nuevo.",
       });
     }
