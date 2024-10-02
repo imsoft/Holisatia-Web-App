@@ -55,7 +55,7 @@ export const AspectInput = ({ id, initialData }: AspectInputProps) => {
         description: "Información actualizada exitosamente.",
       });
       toggleEdit();
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       toast({
         variant: "destructive",

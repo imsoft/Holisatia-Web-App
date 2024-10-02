@@ -3,10 +3,12 @@
 import { FaUserCheck } from "react-icons/fa";
 import { Categories, Logo, UserMenu, UserTypeButton } from ".";
 import { Container, ProfessionalDialog } from "../shared";
-import { useCurrentUser } from "@/hooks";
+import { useSession } from "next-auth/react";
 
 export const Navbar = () => {
-  const currentUser = useCurrentUser();
+  const { data: session, status } = useSession();
+
+  const currentUser = session?.user?.id ? { id: session.user.id } : null;
 
   return (
     <>
@@ -28,7 +30,7 @@ export const Navbar = () => {
       </div>
 
       {/* Incluye el diálogo */}
-      {currentUser && <ProfessionalDialog currentUser={currentUser} />}
+      <ProfessionalDialog currentUser={currentUser} />
     </>
   );
 };

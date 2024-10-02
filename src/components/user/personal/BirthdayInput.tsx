@@ -69,7 +69,7 @@ export const BirthdayInput = ({ id, initialData }: BirthdayInputProps) => {
         description: "Información actualizada exitosamente.",
       });
       toggleEdit();
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       toast({
         variant: "destructive",

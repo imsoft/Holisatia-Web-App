@@ -54,7 +54,7 @@ export const FacebookInput = ({ id, initialData }: FacebookInputProps) => {
         description: "Información actualizada exitosamente.",
       });
       toggleEdit();
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       toast({
         variant: "destructive",

@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { login } from "@/actions";
-import { signIn } from "next-auth/react";
+import { signIn } from "../../../auth";
 import { DEFAULT_LOGIN_REDIRECT } from "../../../routes";
 
 const formSchema = z.object({

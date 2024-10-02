@@ -4,7 +4,7 @@ import Link from "next/link";
 import { IoMenu } from "react-icons/io5";
 import { Avatar } from "../shared";
 import { LogInDialog, RegisterDialog } from "../auth";
-import { useCurrentUser, useLoginDialog, useRegisterDialog } from "@/hooks";
+import { useLoginDialog, useRegisterDialog } from "@/hooks";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,6 +18,7 @@ import { logout } from "@/actions";
 import { useEffect, useState } from "react";
 import { User } from "@prisma/client";
 import { getUserInfo } from "@/actions";
+import { useSession } from "next-auth/react";
 
 const firstSectionMenu = [
   {
@@ -66,21 +67,21 @@ export const UserMenu = () => {
   const { onOpen: openRegister } = useRegisterDialog();
 
   // Obtiene el usuario actual de la sesión
-  const user = useCurrentUser();
+  const { data: session, status } = useSession();
   const [userData, setUserData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserData = async () => {
-      if (user?.id) {
-        const data = await getUserInfo(user.id);
+      if (session?.user.id) {
+        const data = await getUserInfo(session?.user.id);
         setUserData(data);
       }
       setIsLoading(false);
     };
 
     fetchUserData();
-  }, [user?.id]);
+  }, [session?.user.id]);
 
   const onClick = () => {
     logout();
@@ -98,9 +99,9 @@ export const UserMenu = () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          {user ? (
+          {session ? (
             <>
-              <DropdownMenuLabel>¡Hola!, {user.name}</DropdownMenuLabel>
+              <DropdownMenuLabel>¡Hola!, {session.user.name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               {firstSectionMenu.map((item, index) => (
                 <Link key={index} href={item.href}>
@@ -108,9 +109,6 @@ export const UserMenu = () => {
                 </Link>
               ))}
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={onClick}>
-                Cerrar sesión
-              </DropdownMenuItem>
             </>
           ) : (
             <>
@@ -129,6 +127,14 @@ export const UserMenu = () => {
               <DropdownMenuItem>{item.label}</DropdownMenuItem>
             </Link>
           ))}
+          {session && (
+            <>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onClick}>
+                Cerrar sesión
+              </DropdownMenuItem>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
 

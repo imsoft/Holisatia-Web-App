@@ -11,20 +11,20 @@ import {
   PostalCodeInput,
   StateInput,
 } from "@/components/user/location";
-import { useCurrentUser } from "@/hooks";
 import { useEffect, useState } from "react";
 import { Location } from "@prisma/client";
 import { getLocationInfo } from "@/actions";
+import { useSession } from "next-auth/react";
 
 const LocationSettingsPage = () => {
-  const currentUser = useCurrentUser();
+  const { data: session, status } = useSession();
   const [locationData, setLocationData] = useState<Location | null>(null); // Estado para almacenar los datos de localización
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchLocationData = async () => {
-      if (currentUser?.id) {
-        const location = await getLocationInfo(currentUser.id); // Obtener la localización
+      if (session?.user.id) {
+        const location = await getLocationInfo(session?.user.id); // Obtener la localización
         if (location) {
           setLocationData(location);
         } else {
@@ -40,7 +40,7 @@ const LocationSettingsPage = () => {
             locationType: null,
             postalCode: null,
             googleMapsUrl: null,
-            userLocationId: currentUser.id,
+            userLocationId: session?.user.id,
             createdAt: new Date(),
             updatedAt: new Date(),
           });
@@ -50,7 +50,7 @@ const LocationSettingsPage = () => {
     };
 
     fetchLocationData();
-  }, [currentUser?.id]);
+  }, [session?.user.id]);
 
   // Mostrar un indicador de carga mientras se obtienen los datos
   if (isLoading) {
@@ -58,7 +58,7 @@ const LocationSettingsPage = () => {
   }
 
   // Si no se encuentra la información del usuario
-  if (!locationData || !currentUser) {
+  if (!locationData || !session) {
     return (
       <div className="text-center text-red-500">
         Información del usuario incompleta o no encontrada.
@@ -66,7 +66,7 @@ const LocationSettingsPage = () => {
     );
   }
 
-  const userId = currentUser.id;
+  const userId = session?.user.id;
 
   return (
     <>
@@ -79,15 +79,15 @@ const LocationSettingsPage = () => {
             Aquí puedes actualizar tu información de ubicación.
           </p>
 
-          <StateInput initialData={locationData} id={userId} />
-          <CityInput initialData={locationData} id={userId} />
-          <AddressInput initialData={locationData} id={userId} />
-          <OuterNumberInput initialData={locationData} id={userId} />
-          <InnerNumberInput initialData={locationData} id={userId} />
-          <NeighborhoodInput initialData={locationData} id={userId} />
-          <LocationTypeInput initialData={locationData} id={userId} />
-          <PostalCodeInput initialData={locationData} id={userId} />
-          <GoogleMapsUrlInput initialData={locationData} id={userId} />
+          <StateInput initialData={locationData} id={userId || ""} />
+          <CityInput initialData={locationData} id={userId || ""} />
+          <AddressInput initialData={locationData} id={userId || ""} />
+          <OuterNumberInput initialData={locationData} id={userId || ""} />
+          <InnerNumberInput initialData={locationData} id={userId || ""} />
+          <NeighborhoodInput initialData={locationData} id={userId || ""} />
+          <LocationTypeInput initialData={locationData} id={userId || ""} />
+          <PostalCodeInput initialData={locationData} id={userId || ""} />
+          <GoogleMapsUrlInput initialData={locationData} id={userId || ""} />
         </div>
       </div>
     </>

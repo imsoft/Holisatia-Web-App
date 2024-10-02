@@ -105,7 +105,7 @@ export const ImageInput = ({ id, initialData }: ImageInputProps) => {
         description: "Imagen de perfil actualizada exitosamente.",
       });
       toggleEdit();
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       toast({
         variant: "destructive",

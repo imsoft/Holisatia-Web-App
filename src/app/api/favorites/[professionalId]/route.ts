@@ -1,15 +1,16 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { useCurrentUser } from "@/hooks";
+import { useSession } from "next-auth/react";
 
 interface IParams {
   professionalId?: string;
 }
 
 export async function POST(request: Request, { params }: { params: IParams }) {
-  const currentUser = useCurrentUser();
+  const { data: session, status } = useSession();
 
-  if (!currentUser) {
+  if (!session) {
     return NextResponse.error();
   }
 
@@ -19,12 +20,12 @@ export async function POST(request: Request, { params }: { params: IParams }) {
     throw new Error("Invalid ID");
   }
 
-  let favoriteIds = [...(currentUser.favoriteIds || [])];
+  let favoriteIds = [...(session.user.favoriteIds || [])];
   favoriteIds.push(professionalId);
 
   const user = await prisma.user.update({
     where: {
-      id: currentUser.id,
+      id: session?.user.id,
     },
     data: {
       favoriteIds,
@@ -38,9 +39,9 @@ export async function DELETE(
   request: Request,
   { params }: { params: IParams }
 ) {
-  const currentUser = useCurrentUser();
+  const { data: session, status } = useSession();
 
-  if (!currentUser) {
+  if (!session) {
     return NextResponse.error();
   }
 
@@ -50,11 +51,11 @@ export async function DELETE(
     throw new Error("Invalid ID");
   }
 
-  let favoriteIds = [...(currentUser.favoriteIds || [])];
+  let favoriteIds = [...(session?.user.favoriteIds || [])];
   favoriteIds = favoriteIds.filter((id) => id !== professionalId);
 
   const user = await prisma.user.update({
-    where: { id: currentUser.id },
+    where: { id: session?.user.id },
     data: {
       favoriteIds,
     },

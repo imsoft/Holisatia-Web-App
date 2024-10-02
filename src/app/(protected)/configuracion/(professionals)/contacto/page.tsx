@@ -10,19 +10,19 @@ import {
   TiktokInput,
   XInput,
 } from "@/components/user/contact";
-import { useCurrentUser } from "@/hooks";
 import { getContactInfo } from "@/actions";
 import { Contact } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 const ContactSettingsPage = () => {
-  const currentUser = useCurrentUser(); // Obtiene la sesión actual
+  const { data: session, status } = useSession();
   const [contactData, setContactData] = useState<Contact | null>(null); // Estado para almacenar los datos de contacto
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchContactData = async () => {
-      if (currentUser?.id) {
-        const contact = await getContactInfo(currentUser.id); // Obtener la información de contacto
+      if (session?.user.id) {
+        const contact = await getContactInfo(session?.user.id); // Obtener la información de contacto
         if (contact) {
           setContactData(contact);
         } else {
@@ -37,7 +37,7 @@ const ContactSettingsPage = () => {
             xUrl: null,
             linkedinUrl: null,
             phoneNumber: null,
-            userContactId: currentUser.id,
+            userContactId: session?.user.id,
             createdAt: new Date(),
             updatedAt: new Date(),
           });
@@ -47,7 +47,7 @@ const ContactSettingsPage = () => {
     };
 
     fetchContactData();
-  }, [currentUser?.id]);
+  }, [session?.user.id]);
 
   // Mostrar un indicador de carga mientras se obtienen los datos
   if (isLoading) {
@@ -55,7 +55,7 @@ const ContactSettingsPage = () => {
   }
 
   // Si no se encuentra la información del usuario
-  if (!contactData || !currentUser) {
+  if (!contactData || !session) {
     return (
       <div className="text-center text-red-500">
         Información del usuario incompleta o no encontrada.
@@ -63,7 +63,7 @@ const ContactSettingsPage = () => {
     );
   }
 
-  const userId = currentUser.id;
+  const userId = session?.user.id;
 
   return (
     <>

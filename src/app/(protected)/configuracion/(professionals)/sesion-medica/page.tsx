@@ -9,33 +9,33 @@ import {
   PriceInput,
   SessionDurationInput,
 } from "@/components/user/medical-session";
-import { useCurrentUser } from "@/hooks";
 import { ProfessionalSessionDetail } from "@prisma/client"; // Importar el tipo correcto
 import { getMedicalSessionInfo } from "@/actions";
+import { useSession } from "next-auth/react";
 
 const MedicalSessionSettingsPage = () => {
-  const user = useCurrentUser();
+  const { data: session, status } = useSession();
   const [medicalSessionData, setMedicalSessionData] =
     useState<ProfessionalSessionDetail | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchMedicalSessionData = async () => {
-      if (user?.id) {
-        const sessionData = await getMedicalSessionInfo(user.id);
+      if (session?.user.id) {
+        const sessionData = await getMedicalSessionInfo(session?.user.id);
         setMedicalSessionData(sessionData);
       }
       setIsLoading(false);
     };
 
     fetchMedicalSessionData();
-  }, [user]);
+  }, [session?.user.id]);
 
   if (isLoading) {
     return <div className="text-center">Cargando...</div>;
   }
 
-  if (!user || !medicalSessionData) {
+  if (!session || !medicalSessionData) {
     return (
       <div className="text-center text-red-500">
         Información no encontrada. Por favor, completa primero la información de

@@ -7,13 +7,13 @@ import {
   SpecialtyInput,
   TherapyTypeInput,
 } from "@/components/user/professional";
-import { useCurrentUser } from "@/hooks";
 import { useEffect, useState } from "react";
 import { getProfessionalInfo } from "@/actions";
 import { Professional } from "@prisma/client";
+import { useSession } from "next-auth/react";
 
 const ProfessionalSettingsPage = () => {
-  const user = useCurrentUser();
+  const { data: session, status } = useSession();
   const [professionalData, setProfessionalData] = useState<Professional | null>(
     null
   );
@@ -21,20 +21,20 @@ const ProfessionalSettingsPage = () => {
 
   useEffect(() => {
     const fetchProfessionalData = async () => {
-      if (user?.id) {
-        const professional = await getProfessionalInfo(user.id);
+      if (session?.user.id) {
+        const professional = await getProfessionalInfo(session?.user.id);
         setProfessionalData(professional);
       }
       setIsLoading(false);
     };
     fetchProfessionalData();
-  }, [user]);
+  }, [session]);
 
   if (isLoading) {
     return <div className="text-center">Cargando...</div>;
   }
 
-  if (!user || !professionalData) {
+  if (!session || !professionalData) {
     return (
       <div className="text-center text-red-500">
         Información profesional no encontrada.
@@ -54,13 +54,28 @@ const ProfessionalSettingsPage = () => {
           </p>
 
           {/* Pasar el ID del profesional y los datos iniciales a los componentes de entrada */}
-          {user && (
+          {session && (
             <>
-              <SpecialtyInput initialData={professionalData} id={user.id} />
-              <FocusAreasInput initialData={professionalData} id={user.id} />
-              <AspectInput initialData={professionalData} id={user.id} />
-              <TherapyTypeInput initialData={professionalData} id={user.id} />
-              <LanguagesInput initialData={professionalData} id={user.id} />
+              <SpecialtyInput
+                initialData={professionalData}
+                id={session?.user.id}
+              />
+              <FocusAreasInput
+                initialData={professionalData}
+                id={session?.user.id}
+              />
+              <AspectInput
+                initialData={professionalData}
+                id={session?.user.id}
+              />
+              <TherapyTypeInput
+                initialData={professionalData}
+                id={session?.user.id}
+              />
+              <LanguagesInput
+                initialData={professionalData}
+                id={session?.user.id}
+              />
             </>
           )}
         </div>

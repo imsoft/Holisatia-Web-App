@@ -1,7 +1,7 @@
 "use server";
 
 import { AuthError } from "next-auth";
-import { signIn } from "../../auth";
+import { signIn } from "../../auth"
 import { DEFAULT_LOGIN_REDIRECT } from "../../routes";
 
 export const login = async (email: string, password: string) => {

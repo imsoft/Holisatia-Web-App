@@ -55,7 +55,7 @@ export const AddressInput = ({ id, initialData }: AddressInputProps) => {
         description: "Información actualizada exitosamente.",
       });
       toggleEdit();
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       toast({
         variant: "destructive",

@@ -55,7 +55,7 @@ export const NameInput = ({ id, initialData }: NameInputProps) => {
         description: "Información actualizada exitosamente.",
       });
       toggleEdit();
-      router.refresh();
+      window.location.reload();
     } catch (error) {
       toast({
         variant: "destructive",

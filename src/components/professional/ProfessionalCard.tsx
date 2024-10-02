@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Professional } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { HeartButton } from "../shared";
-import { useCurrentUser } from "@/hooks";
+import { useSession } from "next-auth/react";
 
 interface ProfessionalCardProps {
   data: Professional & {
@@ -16,11 +16,9 @@ interface ProfessionalCardProps {
   };
 }
 
-export const ProfessionalCard = ({
-  data,
-}: ProfessionalCardProps) => {
+export const ProfessionalCard = ({ data }: ProfessionalCardProps) => {
   const router = useRouter();
-  const currentUser = useCurrentUser(); 
+  const { data: session, status } = useSession();
 
   return (
     <div
@@ -42,10 +40,7 @@ export const ProfessionalCard = ({
           />
 
           <div className="absolute top-3 right-3">
-            <HeartButton
-              professionalId={data.id}
-              currentUser={currentUser}
-            />
+            <HeartButton professionalId={data.id} currentUser={session?.user} />
           </div>
         </div>
 

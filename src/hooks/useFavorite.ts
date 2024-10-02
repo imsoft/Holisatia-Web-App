@@ -39,7 +39,7 @@ const useFavorite = ({ professionalId, currentUser }: IUseFavorites) => {
       }
 
       await request();
-      router.refresh();
+      window.location.reload();
       toast({
         variant: "success",
         title: "¡Información Actualizada! 🎉",
