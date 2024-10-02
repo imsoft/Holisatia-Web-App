@@ -65,6 +65,7 @@ export const UserMenu = () => {
   const { onOpen: openLogin } = useLoginDialog();
   const { onOpen: openRegister } = useRegisterDialog();
 
+  // Obtiene el usuario actual de la sesión
   const user = useCurrentUser();
   const [userData, setUserData] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,20 +82,6 @@ export const UserMenu = () => {
     fetchUserData();
   }, [user?.id]);
 
-  // Mientras se cargan los datos, mostramos un mensaje de carga
-  if (isLoading) {
-    return <div className="text-center">Cargando...</div>;
-  }
-
-  // Si no se encuentra información del usuario
-  if (!userData) {
-    return (
-      <div className="text-center text-red-500">
-        Información del usuario incompleta o no encontrada.
-      </div>
-    );
-  }
-
   const onClick = () => {
     logout();
   };
@@ -105,20 +92,27 @@ export const UserMenu = () => {
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="rounded-full gap-2">
             <div className="hidden md:block">
-              <Avatar src={userData.image} />
+              <Avatar src={userData?.image || ""} />
             </div>
             <IoMenu size={20} />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          {user && (
+          {user ? (
             <>
-              <DropdownMenuLabel>¡Hola!, {user?.name}</DropdownMenuLabel>
+              <DropdownMenuLabel>¡Hola!, {user.name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              {firstSectionMenu.map((item, index) => (
+                <Link key={index} href={item.href}>
+                  <DropdownMenuItem>{item.label}</DropdownMenuItem>
+                </Link>
+              ))}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={onClick}>
+                Cerrar sesión
+              </DropdownMenuItem>
             </>
-          )}
-
-          {!user ? (
+          ) : (
             <>
               <DropdownMenuItem onClick={openLogin}>
                 Iniciar sesión
@@ -126,29 +120,15 @@ export const UserMenu = () => {
               <DropdownMenuItem onClick={openRegister}>
                 Registrarse
               </DropdownMenuItem>
+              <DropdownMenuSeparator />
             </>
-          ) : (
-            firstSectionMenu.map((item, index) => (
-              <Link key={index} href={item.href}>
-                <DropdownMenuItem>{item.label}</DropdownMenuItem>
-              </Link>
-            ))
           )}
 
-          <DropdownMenuSeparator />
           {secondSectionMenu.map((item, index) => (
             <Link key={index} href={item.href}>
               <DropdownMenuItem>{item.label}</DropdownMenuItem>
             </Link>
           ))}
-          {user && (
-            <>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={onClick}>
-                Cerrar sesión
-              </DropdownMenuItem>
-            </>
-          )}
         </DropdownMenuContent>
       </DropdownMenu>
 
